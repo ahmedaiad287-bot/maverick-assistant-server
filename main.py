@@ -107,6 +107,7 @@ async def generate_hybrid_stream(groq_client: Groq, question: str, history: List
             response = gemini_client.models.generate_content_stream(
                 model='gemini-2.5-flash',
                 contents=contents,
+                value_type=None
             )
 
             for chunk in response:
@@ -175,9 +176,11 @@ async def ask_almenas(request: AskRequest, request_raw: Request, x_api_key: Opti
     )
 
 
-# ⚡ تعديل الإقلاع والربط السحابي والـ Ports المفتوحة هندسياً لـ Railway هنا:
+# ⚡ التعديل التكتيكي الحتمي لبيئة إقلاع السيرفر الخارجي في Railway:
 if __name__ == "__main__":
     import uvicorn
-    # قراءة البورت ديناميكياً من بيئة السيرفر مع ضبط الـ host لاستقبال الإشارات الخارجية
-    server_port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=server_port, reload=False)
+    # سحب منفذ البورت المتغير الإجباري من السيرفر السحابي
+    port_env = os.environ.get("PORT", "8000")
+    server_port = int(port_env)
+    # تشغيل السيرفر بتمرير الـ app كـ object مباشر لمنع تعارض الخيوط البرمجية
+    uvicorn.run(app, host="0.0.0.0", port=server_port, reload=False)
