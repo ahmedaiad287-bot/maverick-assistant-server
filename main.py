@@ -106,9 +106,8 @@ async def generate_hybrid_stream(groq_client: Groq, question: str, history: List
 
             response = gemini_client.models.generate_content_stream(
                 model='gemini-2.5-flash',
-                contents=contents,
-                value_type=None
-            )
+                contents=contents
+           )
 
             for chunk in response:
                 if chunk.text:
