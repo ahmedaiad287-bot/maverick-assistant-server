@@ -104,10 +104,14 @@ async def generate_hybrid_stream(groq_client: Groq, question: str, history: List
             ))
             contents.append(f"User Question: {question}")
 
+            # التعديل التكتيكي: حقن الـ config صراحة لتجنب تضارب الـ metadata في الـ stream
             response = gemini_client.models.generate_content_stream(
                 model='gemini-2.5-flash',
-                contents=contents
-           )
+                contents=contents,
+                config=types.GenerateContentConfig(
+                    temperature=0.4
+                )
+            )
 
             for chunk in response:
                 if chunk.text:
